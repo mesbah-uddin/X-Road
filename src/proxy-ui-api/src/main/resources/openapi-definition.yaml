@@ -3077,6 +3077,68 @@ paths:
           description: an existing item already exists or token not logged in
         '500':
           description: internal server error
+  /tokens/{token_id}/keys/{key_id}/certificates:
+    post: # ok
+      tags:
+        - security server
+      summary: import a certificate from a software or hardware token
+      operationId: importCertificateFromToken
+      description: imports a certificate from a software or hardware token
+      parameters:
+        - in: path
+          name: token_id
+          description: id of the token
+          required: true
+          schema:
+            type: string
+            format: text
+            minLength: 1
+            maxLength: 255
+        - in: path
+          name: key_id
+          description: id of the key
+          required: true
+          schema:
+            type: string
+            format: text
+            minLength: 1
+            maxLength: 255
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: CertificateId
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: text
+                  description: id of the importable certificate
+                  minLength: 1
+                  maxLength: 255
+              example:
+                id: 28A18C53F9450D451F2A4BB15BA2FE3EE0AE69BD
+      responses:
+        '201':
+          description: certificate imported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateDetails'
+        '400':
+          description: request was invalid
+        '401':
+          description: authentication credentials are missing
+        '403':
+          description: request has been refused
+        '404':
+          description: resource requested does not exists
+        '406':
+          description: request specified an invalid format
+        '409':
+          description: an existing item already exists or token not logged in
+        '500':
+          description: internal server error
   /tokens/{id}/login:
     put: # ok
       tags:
